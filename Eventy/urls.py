@@ -15,8 +15,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from events.views import page_not_found, permission_denied
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('events/', include('events.urls')),
+    path('', include('accounts.urls')),
 ]
+
+
+handler404 = page_not_found
+handler403 = permission_denied

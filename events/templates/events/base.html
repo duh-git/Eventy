@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Eventy{% endblock %}</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="{% url 'index' %}">Events</a></li>
+          <li><a href="{% url 'create' %}">Create</a></li>
+        </ul>
+      </nav>
+
+      <h2>
+        <a href="">{{ request.user }}</a> |
+        <a href="{% url 'logout' %}">Выход</a>
+      </h2>
+    </header>
+    <main>{% block content %}{% endblock %}</main>
+  </body>
+</html>

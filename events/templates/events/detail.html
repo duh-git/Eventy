@@ -1,0 +1,49 @@
+{% extends 'events/base.html' %} 
+{% block title %}{{event.title}}{% endblock %}
+
+{% block content %}
+<h1>{{event.title}}</h1>
+
+<h4>{{ event.author }}</h4>
+<h4>{{ event.description }}</h4>
+<h3>{{ event.category }}</h3>
+<h4>{{ event.date }}</h4>
+<h4>{{ event.location }}</h4>
+{% if event.tags %}
+<p>{% for tag in event.tags.all %} #{{ tag }} {% endfor %}</p>
+{% else %}
+<p>No tags</p>
+{% endif %}
+<h4>{{event.get_responses_count}} / {{ event.limit }}</h4>
+
+<form action="{% url 'response' event.id %}" method="post">
+  {% csrf_token %}
+  <button type="submit">Response</button>
+</form>
+
+{% if request.user == event.author %}
+<a href="{% url 'update' event.id %}">Edit</a>
+<a href="{% url 'delete' event.id %}">Delete</a>
+{% endif %}
+
+<section>
+  <h2>Comments</h2>
+  <form action="{% url 'create_comment' %}" method="post">
+    {% csrf_token %}
+    <textarea name="text"></textarea>
+    <input type="text" name="event_id" value="{{ event.id }}" hidden>
+    <button type="submit">Send</button>
+  </form>
+
+  {% for comment in comments %}
+  <h4>{{ comment.author }}</h4>
+  <p>{{ comment.text }}</p>
+  <p>{{ comment.created_at }}</p>
+  {% if comment.author == request.user %}
+    <a href="{% url 'update_comment' event.id %}">Edit</a>
+    <a href="{% url 'delete_comment' comment.id %}">Delete</a>
+  {% endif %} 
+  {% endfor %}
+</section>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'events/base.html' %} 
+{% block content %}
+<h1>Текущие события</h1>
+
+{% if events %}
+<ul>
+  {% for event in events %}
+  <li>
+    <a href="{% url 'detail' event.id %}">
+      <h3>{{ event.title }}</h3>
+      <h3>{{ event.category }}</h3>
+      {% if event.tags %}
+        <p>{% for tag in event.tags.all %} #{{ tag }} {% endfor %}</p>
+      {% else %}
+        <p>No tags</p>
+      {% endif %}
+      <h4>{{ event.date }}</h4>
+      <h4>{{ event.location }}</h4>
+      <h4>{{event.get_responses_count}} / {{ event.limit }}</h4>
+    </a>
+    {% if request.user == event.author %}
+      <a href="{% url 'update' event.id %}">Update</a>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+  <p>События не найдены</p>
+{% endif %} 
+{% endblock %}
